@@ -1,7 +1,27 @@
 {
   "name": "chromaforge",
-  "private": true,
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "High-density, zero-backend OKLCH colorimetric engineering studio & design token engine. 100% client-side with APCA 0.98G / WCAG 2.1 matrix, 2D chromaticity gamut plotter, cubic Bézier lightness easing, and multi-format token export.",
+  "author": "Pedro Bosa",
+  "license": "MIT",
+  "homepage": "https://pedrobosa.github.io/ChromaForge/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/PedroBosa/ChromaForge.git"
+  },
+  "keywords": [
+    "oklch",
+    "colorimetry",
+    "design-tokens",
+    "tailwind-v4",
+    "apca",
+    "wcag",
+    "color-spaces",
+    "gamut-mapping",
+    "bezier-easing",
+    "p3-gamut",
+    "w3c-tokens"
+  ],
   "type": "module",
   "scripts": {
     "dev": "vite",

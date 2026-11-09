@@ -1,8 +1,11 @@
 /**
- * ChromaForge - 2D Canvas Gamut Plotter
+ * ChromaForge - 2D Canvas Gamut Plotter (Refactored & Anti-Collision)
  * High-performance Canvas 2D visualization of the Oklab (a, b) chromaticity plane.
- * Features adaptive auto-zoom for low-chroma neutral ramps, real-time binary search
- * gamut boundaries (sRGB & Display P3), and non-obstructive technical legends.
+ * - Dynamic adaptive auto-zoom ('Fit' for neutral/low-chroma ramps, '1x' for wide gamut).
+ * - Full reference envelope (dashed) + active lightness slice (filled).
+ * - Anti-collision coordinate labeling: radial chroma markers along diagonal (45°),
+ *   cardinal axes along orthogonal crosshairs, and intelligent point label offsets.
+ * - Focused vector clamping on the active shade to prevent stacked line clutter.
  */
 
 import React, { useRef, useEffect, useState, useCallback } from 'react';
@@ -35,7 +38,7 @@ export const GamutCanvasPlotter: React.FC = () => {
 
   // Dynamic axis range: in 'fit' mode, zoom in to display subtle neutral shifts
   const maxChromaInRamp = Math.max(...activeRamp.shades.map((s) => s.clampedOklch.c));
-  const maxAxis = zoomMode === 'fit' ? Math.max(0.08, maxChromaInRamp * 1.45) : 0.32;
+  const maxAxis = zoomMode === 'fit' ? Math.max(0.08, maxChromaInRamp * 1.5) : 0.32;
 
   /**
    * Calculates the gamut boundary polygon in (a, b) space for a given lightness L
@@ -117,33 +120,54 @@ export const GamutCanvasPlotter: React.FC = () => {
         ctx.arc(centerX, centerY, radiusC * scale, 0, Math.PI * 2);
         ctx.stroke();
 
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-        ctx.font = '9px "JetBrains Mono", monospace';
-        ctx.fillText(`C:${radiusC.toFixed(2)}`, centerX + radiusC * scale + 3, centerY - 3);
+        // Place chroma labels along 45° diagonal to avoid collision with cardinal axes!
+        const diagOffset = (radiusC * scale) / Math.SQRT2;
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+        ctx.font = '8px "JetBrains Mono", monospace';
+        ctx.fillText(`C:${radiusC.toFixed(2)}`, centerX + diagOffset + 2, centerY - diagOffset - 2);
       }
     });
 
     // Crosshairs (a=0, b=0)
     ctx.beginPath();
-    ctx.moveTo(centerX, 10);
-    ctx.lineTo(centerX, height - 10);
-    ctx.moveTo(10, centerY);
-    ctx.lineTo(width - 10, centerY);
+    ctx.moveTo(centerX, 12);
+    ctx.lineTo(centerX, height - 12);
+    ctx.moveTo(12, centerY);
+    ctx.lineTo(width - 12, centerY);
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
     ctx.stroke();
 
-    // Axis Labels
+    // Axis Labels with safe padding
     ctx.fillStyle = 'rgba(255, 255, 255, 0.35)';
     ctx.font = '9px "JetBrains Mono", monospace';
-    ctx.fillText('+b (Yellow)', centerX + 6, 16);
-    ctx.fillText('-b (Blue)', centerX + 6, height - 8);
+    ctx.fillText('+b (Yellow)', centerX + 6, 14);
+    ctx.fillText('-b (Blue)', centerX + 6, height - 6);
     ctx.fillText('-a (Green)', 12, centerY - 6);
-    ctx.fillText('+a (Red)', width - 58, centerY - 6);
+    ctx.fillText('+a (Red)', width - 52, centerY - 6);
+
+    // 3. Draw Outer Reference Envelope (Max Gamut at L = 0.65) in subtle dotted line
+    // This gives context so the user understands the full volume even when slice is dark
+    if (plotMode === 'slice') {
+      const refPolygon = computeGamutPolygon(0.65, false);
+      if (refPolygon.length > 0) {
+        ctx.beginPath();
+        ctx.moveTo(toCanvasX(refPolygon[0].a), toCanvasY(refPolygon[0].b));
+        for (let i = 1; i < refPolygon.length; i++) {
+          ctx.lineTo(toCanvasX(refPolygon[i].a), toCanvasY(refPolygon[i].b));
+        }
+        ctx.closePath();
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+        ctx.lineWidth = 1;
+        ctx.setLineDash([2, 4]);
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+    }
 
     const targetLightness =
       plotMode === 'slice' ? selectedShade.clampedOklch.l : 0.65;
 
-    // 3. Draw Display P3 Boundary
+    // 4. Draw Display P3 Boundary
     const p3Polygon = computeGamutPolygon(targetLightness, true);
     if (p3Polygon.length > 0) {
       ctx.beginPath();
@@ -152,7 +176,7 @@ export const GamutCanvasPlotter: React.FC = () => {
         ctx.lineTo(toCanvasX(p3Polygon[i].a), toCanvasY(p3Polygon[i].b));
       }
       ctx.closePath();
-      ctx.fillStyle = 'rgba(157, 78, 221, 0.04)';
+      ctx.fillStyle = 'rgba(157, 78, 221, 0.05)';
       ctx.fill();
       ctx.strokeStyle = 'rgba(199, 125, 255, 0.35)';
       ctx.lineWidth = 1.5;
@@ -161,7 +185,7 @@ export const GamutCanvasPlotter: React.FC = () => {
       ctx.setLineDash([]);
     }
 
-    // 4. Draw sRGB Boundary
+    // 5. Draw sRGB Boundary
     const srgbPolygon = computeGamutPolygon(targetLightness, false);
     if (srgbPolygon.length > 0) {
       ctx.beginPath();
@@ -177,7 +201,7 @@ export const GamutCanvasPlotter: React.FC = () => {
       ctx.stroke();
     }
 
-    // 5. Connect Ramp Points with Smooth Trajectory
+    // 6. Connect Ramp Points with Smooth Trajectory
     const rampCoords = activeRamp.shades.map((shade) => {
       const oklab = oklchToOklab(shade.clampedOklch);
       const rawOklab = oklchToOklab(shade.oklch);
@@ -204,28 +228,37 @@ export const GamutCanvasPlotter: React.FC = () => {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // 6. Draw Vector Clamping Lines & Points
+    // 7. Draw Points & Clamping Vectors (Focused to avoid line clutter)
     rampCoords.forEach((pt) => {
       const isSelected = activeShadeStep === pt.step;
       const isHovered = hoveredStep === pt.step;
 
-      if (pt.isClipped) {
+      // Draw vector clamping ONLY for the selected or hovered shade to avoid line mess!
+      if (pt.isClipped && (isSelected || isHovered)) {
         ctx.beginPath();
         ctx.moveTo(pt.rawX, pt.rawY);
         ctx.lineTo(pt.x, pt.y);
-        ctx.strokeStyle = 'rgba(251, 191, 36, 0.85)';
+        ctx.strokeStyle = '#F59E0B';
         ctx.lineWidth = 1.5;
         ctx.setLineDash([2, 2]);
         ctx.stroke();
         ctx.setLineDash([]);
 
+        // Target unclipped point (hollow ring)
         ctx.beginPath();
-        ctx.arc(pt.rawX, pt.rawY, 3.5, 0, Math.PI * 2);
+        ctx.arc(pt.rawX, pt.rawY, 4, 0, Math.PI * 2);
         ctx.strokeStyle = '#F59E0B';
         ctx.lineWidth = 1.5;
         ctx.stroke();
+      } else if (pt.isClipped) {
+        // Discrete small indicator for other clamped points
+        ctx.beginPath();
+        ctx.arc(pt.rawX, pt.rawY, 2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(245, 158, 11, 0.5)';
+        ctx.fill();
       }
 
+      // Clamped in-gamut point
       ctx.beginPath();
       const radius = isSelected ? 6.5 : isHovered ? 5.5 : 4;
       ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
@@ -235,10 +268,26 @@ export const GamutCanvasPlotter: React.FC = () => {
       ctx.lineWidth = isSelected ? 2 : 1;
       ctx.stroke();
 
-      if (pt.step === 50 || pt.step === 500 || pt.step === 950 || isSelected || isHovered) {
-        ctx.fillStyle = isSelected ? '#FFFFFF' : 'rgba(255, 255, 255, 0.6)';
+      // Intelligent Label Placement with Anti-Collision:
+      // - Step 50: place above-left
+      // - Step 950: place below-right
+      // - Selected / Hovered: place with priority
+      if (isSelected || isHovered) {
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = 'bold 9px "JetBrains Mono", monospace';
+        ctx.fillText(String(pt.step), pt.x + 8, pt.y - 4);
+      } else if (pt.step === 50) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
         ctx.font = '9px "JetBrains Mono", monospace';
-        ctx.fillText(String(pt.step), pt.x + 6, pt.y - 4);
+        ctx.fillText('50', pt.x - 14, pt.y - 6);
+      } else if (pt.step === 950) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.fillText('950', pt.x + 6, pt.y + 10);
+      } else if (pt.step === 500) {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.fillText('500', pt.x + 8, pt.y - 4);
       }
     });
   }, [
@@ -321,18 +370,18 @@ export const GamutCanvasPlotter: React.FC = () => {
       ref={containerRef}
       className="flex flex-col rounded-xl border border-white/[0.07] bg-[#0D0D10] overflow-hidden"
     >
-      {/* Plotter Header */}
-      <div className="h-10 px-3.5 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-[#131317]">
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-300">
-            Gamut Chromaticity (Oklab a-b)
+      {/* Plotter Header: Flexible padding and safe layout */}
+      <div className="py-2 px-3 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-[#131317] gap-2 flex-wrap">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-300 truncate">
+            Gamut Chromaticity
           </span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/[0.04] text-zinc-400 border border-white/[0.04]">
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/[0.04] text-zinc-400 border border-white/[0.04] shrink-0">
             L: {selectedShade.clampedOklch.l.toFixed(3)}
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 shrink-0">
           {/* Zoom Toggle */}
           <button
             onClick={() => setZoomMode(zoomMode === 'full' ? 'fit' : 'full')}
@@ -341,10 +390,10 @@ export const GamutCanvasPlotter: React.FC = () => {
                 ? 'bg-[#1F1F28] text-[#818CF8] border-[#818CF8]/40 font-semibold'
                 : 'text-zinc-400 border-white/[0.06] hover:bg-white/[0.04]'
             }`}
-            title={zoomMode === 'fit' ? 'Reset to Full Gamut' : 'Auto-Fit Zoom (Great for neutral/low-chroma ramps)'}
+            title={zoomMode === 'fit' ? 'Reset to Full Gamut' : 'Auto-Fit Zoom'}
           >
             {zoomMode === 'fit' ? <ZoomOut className="w-3 h-3" /> : <ZoomIn className="w-3 h-3" />}
-            <span>{zoomMode === 'fit' ? 'Fit Zoom' : '1x Zoom'}</span>
+            <span>{zoomMode === 'fit' ? 'Fit' : '1x'}</span>
           </button>
 
           {/* Mode Selector */}
@@ -353,7 +402,7 @@ export const GamutCanvasPlotter: React.FC = () => {
               onClick={() => setPlotMode('slice')}
               className={`px-2 py-0.5 rounded transition-colors ${
                 plotMode === 'slice'
-                  ? 'bg-[#1F1F28] text-white shadow-xs'
+                  ? 'bg-[#1F1F28] text-white shadow-xs font-semibold'
                   : 'text-zinc-500 hover:text-zinc-300'
               }`}
             >
@@ -363,7 +412,7 @@ export const GamutCanvasPlotter: React.FC = () => {
               onClick={() => setPlotMode('envelope')}
               className={`px-2 py-0.5 rounded transition-colors ${
                 plotMode === 'envelope'
-                  ? 'bg-[#1F1F28] text-white shadow-xs'
+                  ? 'bg-[#1F1F28] text-white shadow-xs font-semibold'
                   : 'text-zinc-500 hover:text-zinc-300'
               }`}
             >
@@ -384,7 +433,7 @@ export const GamutCanvasPlotter: React.FC = () => {
         />
       </div>
 
-      {/* Clean Bottom Legend Strip (Non-obtrusive, doesn't block the canvas) */}
+      {/* Clean Bottom Legend Strip */}
       <div className="px-3 py-1.5 border-t border-white/[0.06] bg-[#0A0A0D] flex items-center justify-between text-[10px] font-mono flex-wrap gap-2">
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-1.5">

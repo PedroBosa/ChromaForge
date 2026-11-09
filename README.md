@@ -3,12 +3,15 @@
 > **OKLCH Colorimetric Engineering Studio & Zero-Backend Design Token Engine**  
 > Engineered for the next generation of web interfaces: Tailwind CSS v4 `@theme`, CSS Color Module 4, and W3C Design Tokens.
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-pedrobosa.github.io%2FChromaForge-indigo?style=for-the-badge&logo=github)](https://pedrobosa.github.io/ChromaForge/)
+
 [![TypeScript](https://img.shields.io/badge/TypeScript-Strict%20Mode-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18-61DAFB?logo=react)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4_Ready-38BDF8?logo=tailwindcss)](https://tailwindcss.com/)
 [![Color Space](https://img.shields.io/badge/Color_Space-OKLCH_%2F_Oklab-indigo)](https://bottosson.github.io/posts/oklab/)
 [![Accessibility](https://img.shields.io/badge/Accessibility-APCA_+_WCAG_2.1-58DB91)](#optical-accessibility-matrix)
-[![Deploy](https://img.shields.io/badge/Deploy-GitHub_Pages-black?logo=github)](https://pages.github.com/)
+[![Deploy](https://img.shields.io/badge/Deploy-GitHub_Pages-black?logo=github)](https://pedrobosa.github.io/ChromaForge/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ---
 
@@ -126,7 +129,7 @@ Implements standard **APCA 0.98G-4g** (W3C Silver / WCAG 3.0 draft), which model
 ### Installation & Development
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/ChromaForge.git
+git clone https://github.com/PedroBosa/ChromaForge.git
 cd ChromaForge
 
 # Install dependencies
@@ -150,13 +153,12 @@ npm run preview
 ## Deployment to GitHub Pages
 
 This project is configured with GitHub Actions for automated deployment.
-1. Push your repository to GitHub on branch `main`.
-2. Go to **Settings > Pages** in your GitHub repository.
-3. Under **Build and deployment > Source**, select **GitHub Actions**.
-4. The workflow in `.github/workflows/deploy.yml` will automatically build and deploy `dist/` to GitHub Pages.
+1. Repository deployed at: `https://github.com/PedroBosa/ChromaForge`
+2. Live production application: `https://pedrobosa.github.io/ChromaForge/`
+3. The workflow in `.github/workflows/deploy.yml` automatically builds and deploys `dist/` on every push to `main`.
 
 ---
 
 ## License
 
-MIT © 2026 ChromaForge Contributors.
+MIT © 2026 [Pedro Bosa](https://github.com/PedroBosa).
