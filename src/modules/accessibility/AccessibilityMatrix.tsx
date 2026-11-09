@@ -2,6 +2,7 @@
  * ChromaForge - Optical Accessibility Matrix & Contrast Inspector
  * 11x11 bidirectional cross-ramp contrast grid calculating simultaneous
  * APCA Lc (-108 to +106) and WCAG 2.1 ratios with live typography previews.
+ * Fully responsive with educational polarity and divergence insights.
  */
 
 import React, { useState, useMemo } from 'react';
@@ -13,6 +14,7 @@ import {
   ShieldCheck,
   Check,
   Copy,
+  Info,
 } from 'lucide-react';
 
 export const AccessibilityMatrix: React.FC = () => {
@@ -53,6 +55,11 @@ export const AccessibilityMatrix: React.FC = () => {
     [textShade.clampedHex, surfaceShade.clampedHex]
   );
 
+  // Detect genuine divergence between WCAG 2.1 and APCA
+  const hasMethodologyDivergence =
+    (activeReport.wcagAA && Math.abs(activeReport.apcaScore) < 45) ||
+    (!activeReport.wcagAA && Math.abs(activeReport.apcaScore) >= 60);
+
   const handleCopySnippet = async () => {
     const css = `/* ChromaForge Accessible Pair */\ncolor: ${textShade.clampedHex}; /* ${fgRamp.name}-${textShade.step} */\nbackground-color: ${surfaceShade.clampedHex}; /* ${bgRamp.name}-${surfaceShade.step} */\n/* WCAG: ${activeReport.wcagRatio}:1 · APCA: ${activeReport.apcaScore} Lc */`;
     try {
@@ -65,14 +72,14 @@ export const AccessibilityMatrix: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex overflow-hidden bg-[#09090B] text-[#F4F4F6]">
+    <div className="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden bg-[#09090B] text-[#F4F4F6]">
       {/* ==================================================================== */}
       {/* 1. LEFT / CENTER: The 11x11 Optical Matrix Table                     */}
       {/* ==================================================================== */}
-      <div className="flex-1 flex flex-col overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 flex flex-col overflow-y-auto p-4 md:p-6 space-y-6 min-w-0">
         {/* Matrix Controls & Ramp Selectors Bar */}
         <div className="flex items-center justify-between pb-4 border-b border-white/[0.06] flex-wrap gap-4">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             {/* Foreground Ramp Selector */}
             <div className="flex items-center gap-1.5 text-xs font-mono">
               <span className="text-zinc-500">Text:</span>
@@ -133,9 +140,9 @@ export const AccessibilityMatrix: React.FC = () => {
           </div>
         </div>
 
-        {/* The 11x11 Grid Matrix Container */}
+        {/* The 11x11 Grid Matrix Container with Horizontal Scroll */}
         <div className="rounded-xl border border-white/[0.07] bg-[#0D0D10] p-4 overflow-x-auto shadow-sm">
-          <div className="min-w-[620px]">
+          <div className="min-w-[640px]">
             {/* Column Headers (Surface Shades) */}
             <div className="grid grid-cols-12 gap-1 pb-2 border-b border-white/[0.06] text-center text-[10px] font-mono">
               <div className="text-left text-zinc-500 flex items-center pl-1">
@@ -181,7 +188,6 @@ export const AccessibilityMatrix: React.FC = () => {
                         selectedPair.textStep === textStep &&
                         selectedPair.surfaceStep === surfStep;
 
-                      // APCA rating style
                       let cellStyle = 'bg-zinc-900/40 text-zinc-600 border-transparent';
                       let scoreText = '';
 
@@ -242,37 +248,46 @@ export const AccessibilityMatrix: React.FC = () => {
           </div>
         </div>
 
-        {/* Matrix Legend */}
-        <div className="flex items-center justify-between p-3 rounded-lg bg-[#0D0D10] border border-white/[0.06] text-xs font-mono flex-wrap gap-2">
-          <div className="flex items-center gap-4 flex-wrap">
-            <span className="text-zinc-500 uppercase text-[10px]">Tiers:</span>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-xs bg-[#58DB91]/30 border border-[#58DB91]" />
-              <span className="text-zinc-300">Optimal (Lc ≥ 90 / AAA)</span>
+        {/* Matrix Legend & Educational Polarity Guide */}
+        <div className="flex flex-col space-y-2 p-3 rounded-lg bg-[#0D0D10] border border-white/[0.06] text-xs font-mono">
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-4 flex-wrap">
+              <span className="text-zinc-500 uppercase text-[10px]">Tiers:</span>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#58DB91]/30 border border-[#58DB91]" />
+                <span className="text-zinc-300">Optimal (|Lc| ≥ 90 / AAA)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#58DB91]/10 border border-[#58DB91]/30" />
+                <span className="text-zinc-300">Body Text (|Lc| ≥ 75 / AA)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-xs bg-[#22D3EE]/20 border border-[#22D3EE]" />
+                <span className="text-zinc-300">Headlines / UI (|Lc| ≥ 60)</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-xs bg-zinc-800 border border-zinc-700" />
+                <span className="text-zinc-500">Fail / Non-Text</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-xs bg-[#58DB91]/10 border border-[#58DB91]/30" />
-              <span className="text-zinc-300">Body Text (Lc ≥ 75 / AA)</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-xs bg-[#22D3EE]/20 border border-[#22D3EE]" />
-              <span className="text-zinc-300">Headlines / UI (Lc ≥ 60 / AA Large)</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-xs bg-zinc-800 border border-zinc-700" />
-              <span className="text-zinc-500">Fail / Non-Text</span>
-            </div>
+            <span className="text-zinc-500 text-[10px]">
+              Rows: Foreground · Columns: Background
+            </span>
           </div>
-          <span className="text-zinc-500 text-[10px]">
-            Rows: Foreground · Columns: Background
-          </span>
+
+          <div className="pt-2 border-t border-white/[0.04] text-[10px] text-zinc-400 flex items-center gap-1.5">
+            <Info className="w-3.5 h-3.5 shrink-0 text-[#818CF8]" />
+            <span>
+              <strong>Note on APCA Polarity:</strong> Positive values (+Lc) indicate dark text on light surfaces. Negative values (-Lc) indicate light text on dark surfaces. High absolute values (|Lc| ≥ 75) mean safe readability in both polarities.
+            </span>
+          </div>
         </div>
       </div>
 
       {/* ==================================================================== */}
       {/* 2. RIGHT SIDEBAR: Gamut Map Plotter & Contrast Pair Inspector       */}
       {/* ==================================================================== */}
-      <aside className="w-96 border-l border-white/[0.07] bg-[#0D0D10] flex flex-col shrink-0 overflow-y-auto">
+      <aside className="w-full lg:w-96 border-t lg:border-t-0 lg:border-l border-white/[0.07] bg-[#0D0D10] flex flex-col shrink-0 overflow-y-auto">
         {/* Upper Section: Gamut Canvas Plotter */}
         <div className="p-4 border-b border-white/[0.06]">
           <GamutCanvasPlotter />
@@ -398,6 +413,19 @@ export const AccessibilityMatrix: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Divergence Insight Callout if WCAG and APCA diverge */}
+          {hasMethodologyDivergence && (
+            <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-200 text-[11px] font-mono space-y-1">
+              <div className="font-semibold flex items-center gap-1 text-amber-300">
+                <Info className="w-3.5 h-3.5" />
+                <span>Methodology Divergence Detected</span>
+              </div>
+              <p className="text-[10px] text-amber-200/80 leading-relaxed">
+                WCAG 2.1 and APCA assess this pair differently. Classical WCAG 2.1 overestimates dark-mode contrast due to simple linear offset (+0.05), whereas APCA incorporates human visual spatial frequency and black-level flare.
+              </p>
+            </div>
+          )}
 
           {/* Typography Recommendation */}
           <div className="p-3 rounded-lg bg-[#131317] border border-white/[0.06] space-y-1.5 text-xs font-mono">
