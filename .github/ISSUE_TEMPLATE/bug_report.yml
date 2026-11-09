@@ -1,0 +1,54 @@
+name: Relato de Bug
+description: Crie um relatório para nos ajudar a reproduzir e corrigir um defeito no ChromaForge.
+title: 'fix: '
+labels: ['bug', 'triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Agradecemos pelo relato. Certifique-se de que o problema pode ser reproduzido na versão mais recente disponível no GitHub Pages.
+  - type: textarea
+    id: description
+    attributes:
+      label: Descrição do problema
+      description: Explique de forma clara e objetiva o comportamento inesperado.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passos para reprodução
+      description: Liste os passos necessários para reproduzir o problema.
+      placeholder: |
+        1. Abra o ChromaForge no navegador
+        2. Selecione a rampa cromática ou insira o código HEX / OKLCH
+        3. Altere a curvatura de Bézier ou o envelope de croma
+        4. Observe a discrepância no cálculo ou na visualização
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamento esperado
+      description: O que você esperava que acontecesse?
+    validations:
+      required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Navegador utilizado
+      options:
+        - Google Chrome
+        - Mozilla Firefox
+        - Apple Safari
+        - Microsoft Edge
+        - Outro
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Sistema Operacional
+      placeholder: 'ex.: Windows 11, macOS Sequoia, Ubuntu 24.04'
+    validations:
+      required: true
