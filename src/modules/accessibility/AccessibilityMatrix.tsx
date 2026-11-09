@@ -82,11 +82,11 @@ export const AccessibilityMatrix: React.FC = () => {
           <div className="flex items-center gap-3 flex-wrap">
             {/* Foreground Ramp Selector */}
             <div className="flex items-center gap-1.5 text-xs font-mono">
-              <span className="text-zinc-500">Text:</span>
+              <span className="text-zinc-500">Texto:</span>
               <select
                 value={fgRampId}
                 onChange={(e) => setFgRampId(e.target.value)}
-                className="h-8 px-2.5 rounded bg-[#131317] border border-white/[0.08] text-zinc-200 focus:outline-none focus:border-[#4F46E5] text-xs font-mono"
+                className="h-8 px-2.5 rounded-lg bg-zinc-950/80 border border-white/[0.08] text-zinc-200 focus:outline-none focus:border-primary text-xs font-mono"
               >
                 {ramps.map((ramp) => (
                   <option key={ramp.id} value={ramp.id}>
@@ -96,15 +96,15 @@ export const AccessibilityMatrix: React.FC = () => {
               </select>
             </div>
 
-            <span className="text-zinc-600 font-mono text-xs">on</span>
+            <span className="text-zinc-600 font-mono text-xs">em</span>
 
             {/* Background Ramp Selector */}
             <div className="flex items-center gap-1.5 text-xs font-mono">
-              <span className="text-zinc-500">Surface:</span>
+              <span className="text-zinc-500">Superfície:</span>
               <select
                 value={bgRampId}
                 onChange={(e) => setBgRampId(e.target.value)}
-                className="h-8 px-2.5 rounded bg-[#131317] border border-white/[0.08] text-zinc-200 focus:outline-none focus:border-[#4F46E5] text-xs font-mono"
+                className="h-8 px-2.5 rounded-lg bg-zinc-950/80 border border-white/[0.08] text-zinc-200 focus:outline-none focus:border-primary text-xs font-mono"
               >
                 {ramps.map((ramp) => (
                   <option key={ramp.id} value={ramp.id}>
@@ -116,32 +116,32 @@ export const AccessibilityMatrix: React.FC = () => {
           </div>
 
           {/* Metric Mode Toggle (APCA Lc vs WCAG 2.1) */}
-          <div className="flex items-center bg-[#131317] p-0.5 rounded border border-white/[0.07] text-xs font-mono">
+          <div className="flex items-center gap-1 bg-zinc-950/80 p-1 rounded-lg border border-white/[0.06] text-xs font-mono">
             <button
               onClick={() => setMetricMode('apca')}
-              className={`px-3 py-1 rounded transition-colors ${
+              className={`px-3 py-1 rounded-[6px] font-medium transition-all border whitespace-nowrap ${
                 metricMode === 'apca'
-                  ? 'bg-[#1F1F28] text-white shadow-xs'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'border-white/[0.08] bg-zinc-800/90 text-white shadow-sm'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
               }`}
             >
               APCA Lc (WCAG 3.0 draft)
             </button>
             <button
               onClick={() => setMetricMode('wcag')}
-              className={`px-3 py-1 rounded transition-colors ${
+              className={`px-3 py-1 rounded-[6px] font-medium transition-all border whitespace-nowrap ${
                 metricMode === 'wcag'
-                  ? 'bg-[#1F1F28] text-white shadow-xs'
-                  : 'text-zinc-400 hover:text-zinc-200'
+                  ? 'border-white/[0.08] bg-zinc-800/90 text-white shadow-sm'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
               }`}
             >
-              WCAG 2.1 Ratio
+              Razão WCAG 2.1
             </button>
           </div>
         </div>
 
         {/* The 11x11 Grid Matrix Container with Horizontal Scroll */}
-        <div className="rounded-xl border border-white/[0.07] bg-[#0D0D10] p-4 overflow-x-auto shadow-sm">
+        <div className="rounded-xl border border-white/[0.08] bg-[#0D0D10] p-4 sm:p-5 overflow-x-auto shadow-2xl shadow-black/40 custom-scrollbar">
           <div className="min-w-[640px]">
             {/* Column Headers (Surface Shades) */}
             <div className="grid grid-cols-12 gap-1 pb-2 border-b border-white/[0.06] text-center text-[10px] font-mono">
@@ -287,7 +287,7 @@ export const AccessibilityMatrix: React.FC = () => {
       {/* ==================================================================== */}
       {/* 2. RIGHT SIDEBAR: Gamut Map Plotter & Contrast Pair Inspector       */}
       {/* ==================================================================== */}
-      <aside className="w-full lg:w-96 border-t lg:border-t-0 lg:border-l border-white/[0.07] bg-[#0D0D10] flex flex-col shrink-0 overflow-y-auto">
+      <aside className="w-full lg:w-96 border-t lg:border-t-0 lg:border-l border-white/[0.08] bg-[#0D0D10] flex flex-col shrink-0 overflow-y-auto custom-scrollbar">
         {/* Upper Section: Gamut Canvas Plotter */}
         <div className="p-4 border-b border-white/[0.06]">
           <GamutCanvasPlotter />
@@ -297,31 +297,31 @@ export const AccessibilityMatrix: React.FC = () => {
         <div className="p-4 space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#58DB91]" />
+              <ShieldCheck className="h-4 w-4 text-success" />
               <span className="text-xs font-mono uppercase tracking-wider text-zinc-300">
-                Pair Contrast Inspector
+                Inspetor de Contraste
               </span>
             </div>
             <button
               onClick={handleCopySnippet}
-              className="p-1 rounded text-zinc-400 hover:text-white hover:bg-white/[0.06] transition-colors"
-              title="Copy CSS Pair"
+              className="flex h-7 w-7 items-center justify-center rounded-lg text-zinc-400 hover:text-white border border-white/[0.08] bg-white/[0.03] hover:bg-white/[0.08] transition-colors"
+              title="Copiar CSS do Par"
             >
               {copiedSnippet ? (
-                <Check className="w-3.5 h-3.5 text-[#58DB91]" />
+                <Check className="h-3.5 w-3.5 text-success" />
               ) : (
-                <Copy className="w-3.5 h-3.5" />
+                <Copy className="h-3.5 w-3.5" />
               )}
             </button>
           </div>
 
           {/* Color Pair Indicator */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2 rounded bg-[#070709] border border-white/[0.06] space-y-1">
-              <span className="text-[10px] text-zinc-500 block">Foreground (Text)</span>
+            <div className="p-2.5 rounded-lg bg-zinc-950/80 border border-white/[0.06] space-y-1">
+              <span className="text-[10px] text-zinc-500 block">Texto (Foreground)</span>
               <div className="flex items-center gap-2">
                 <div
-                  className="w-4 h-4 rounded-xs border border-white/20"
+                  className="w-4 h-4 rounded-sm border border-white/20 shadow-xs"
                   style={{ backgroundColor: textShade.clampedHex }}
                 />
                 <span className="font-semibold text-zinc-200">
@@ -331,11 +331,11 @@ export const AccessibilityMatrix: React.FC = () => {
               <span className="text-[10px] text-zinc-400 block">{textShade.clampedHex}</span>
             </div>
 
-            <div className="p-2 rounded bg-[#070709] border border-white/[0.06] space-y-1">
-              <span className="text-[10px] text-zinc-500 block">Background (Surface)</span>
+            <div className="p-2.5 rounded-lg bg-zinc-950/80 border border-white/[0.06] space-y-1">
+              <span className="text-[10px] text-zinc-500 block">Fundo (Surface)</span>
               <div className="flex items-center gap-2">
                 <div
-                  className="w-4 h-4 rounded-xs border border-white/20"
+                  className="w-4 h-4 rounded-sm border border-white/20 shadow-xs"
                   style={{ backgroundColor: surfaceShade.clampedHex }}
                 />
                 <span className="font-semibold text-zinc-200">

@@ -267,8 +267,8 @@ export const BezierCurveEditor: React.FC = () => {
 
       {/* Coordinate Displays with Direct Numerical Adjustment */}
       <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
-        <div className="flex items-center justify-between px-2 py-1 rounded bg-[#131317] border border-white/[0.06]">
-          <span className="text-[#818CF8] font-semibold">P1</span>
+        <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-zinc-950/80 border border-white/[0.06]">
+          <span className="text-primary-hover font-semibold">P1</span>
           <div className="flex items-center gap-1 text-[10px]">
             <input
               type="number"
@@ -281,7 +281,7 @@ export const BezierCurveEditor: React.FC = () => {
                   lightnessP1: [Math.max(0, Math.min(1, parseFloat(e.target.value) || 0)), lightnessP1[1]],
                 })
               }
-              className="w-10 h-5 px-0.5 text-center bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:outline-none focus:border-[#4F46E5]"
+              className="w-11 h-6 px-1 text-center bg-zinc-950 border border-white/[0.08] rounded-[6px] text-zinc-200 focus:outline-none focus:border-primary text-xs font-mono"
             />
             <span className="text-zinc-500">,</span>
             <input
@@ -295,12 +295,12 @@ export const BezierCurveEditor: React.FC = () => {
                   lightnessP1: [lightnessP1[0], Math.max(0, Math.min(1, parseFloat(e.target.value) || 0))],
                 })
               }
-              className="w-10 h-5 px-0.5 text-center bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:outline-none focus:border-[#4F46E5]"
+              className="w-11 h-6 px-1 text-center bg-zinc-950 border border-white/[0.08] rounded-[6px] text-zinc-200 focus:outline-none focus:border-primary text-xs font-mono"
             />
           </div>
         </div>
-        <div className="flex items-center justify-between px-2 py-1 rounded bg-[#131317] border border-white/[0.06]">
-          <span className="text-[#C77DFF] font-semibold">P2</span>
+        <div className="flex items-center justify-between px-2.5 py-1.5 rounded-lg bg-zinc-950/80 border border-white/[0.06]">
+          <span className="text-secondary-hover font-semibold">P2</span>
           <div className="flex items-center gap-1 text-[10px]">
             <input
               type="number"
@@ -313,7 +313,7 @@ export const BezierCurveEditor: React.FC = () => {
                   lightnessP2: [Math.max(0, Math.min(1, parseFloat(e.target.value) || 0)), lightnessP2[1]],
                 })
               }
-              className="w-10 h-5 px-0.5 text-center bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:outline-none focus:border-[#9D4EDD]"
+              className="w-11 h-6 px-1 text-center bg-zinc-950 border border-white/[0.08] rounded-[6px] text-zinc-200 focus:outline-none focus:border-secondary text-xs font-mono"
             />
             <span className="text-zinc-500">,</span>
             <input
@@ -327,14 +327,14 @@ export const BezierCurveEditor: React.FC = () => {
                   lightnessP2: [lightnessP2[0], Math.max(0, Math.min(1, parseFloat(e.target.value) || 0))],
                 })
               }
-              className="w-10 h-5 px-0.5 text-center bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:outline-none focus:border-[#9D4EDD]"
+              className="w-11 h-6 px-1 text-center bg-zinc-950 border border-white/[0.08] rounded-[6px] text-zinc-200 focus:outline-none focus:border-secondary text-xs font-mono"
             />
           </div>
         </div>
       </div>
 
       {/* Quick Curve Presets */}
-      <div className="flex items-center gap-1 overflow-x-auto py-1">
+      <div className="flex items-center gap-1 overflow-x-auto py-1 custom-scrollbar">
         {PRESETS.map((preset) => {
           const isActive =
             lightnessP1[0] === preset.p1[0] &&
@@ -351,10 +351,10 @@ export const BezierCurveEditor: React.FC = () => {
                   lightnessP2: preset.p2,
                 })
               }
-              className={`px-2 py-0.5 text-[10px] font-mono rounded transition-colors whitespace-nowrap ${
+              className={`px-2.5 py-1 text-[11px] font-mono rounded-[6px] transition-all border whitespace-nowrap ${
                 isActive
-                  ? 'bg-[#1F1F28] text-white border border-white/[0.15]'
-                  : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/[0.04]'
+                  ? 'border-white/[0.08] bg-zinc-800 text-white shadow-sm font-medium'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
               }`}
             >
               {preset.name}

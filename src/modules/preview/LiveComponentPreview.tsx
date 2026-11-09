@@ -146,21 +146,21 @@ export const LiveComponentPreview: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col overflow-y-auto bg-[#09090B] text-[#F4F4F6]">
       {/* 1. Preview Controller Top Bar */}
-      <div className="h-12 px-6 border-b border-white/[0.07] flex items-center justify-between shrink-0 bg-[#0D0D10]">
+      <div className="h-14 px-4 sm:px-6 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-[#0D0D10]">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: p500 }} />
+            <span className="w-2.5 h-2.5 rounded-full shrink-0 shadow-sm" style={{ backgroundColor: p500 }} />
             <span className="text-xs font-semibold uppercase tracking-wider text-zinc-300 hidden sm:inline">
-              Live Token Environment
+              Ambiente de Tokens
             </span>
           </div>
 
           <div className="flex items-center gap-1.5 text-xs font-mono">
-            <span className="text-zinc-500 hidden sm:inline">Theme:</span>
+            <span className="text-zinc-500 hidden sm:inline">Paleta:</span>
             <select
               value={activeRampId}
               onChange={(e) => setActiveRampId(e.target.value)}
-              className="h-7 px-2 rounded bg-[#131317] border border-white/[0.08] text-zinc-200 focus:outline-none focus:border-[#4F46E5] text-xs font-mono"
+              className="h-8 px-2.5 rounded-lg bg-zinc-950/80 border border-white/[0.08] text-zinc-200 focus:outline-none focus:border-primary text-xs font-mono"
             >
               {ramps.map((ramp) => (
                 <option key={ramp.id} value={ramp.id}>
@@ -173,24 +173,28 @@ export const LiveComponentPreview: React.FC = () => {
 
         {/* Theme Mode Toggle (Dark UI / Light UI surface test) */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center bg-[#131317] p-0.5 rounded border border-white/[0.07] text-xs font-mono">
+          <div className="flex items-center gap-1 bg-zinc-950/80 p-1 rounded-lg border border-white/[0.06] text-xs font-mono">
             <button
               onClick={() => setPreviewTheme('dark')}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded transition-colors ${
-                isDark ? 'bg-[#1F1F28] text-white shadow-xs' : 'text-zinc-400 hover:text-zinc-200'
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-[6px] transition-all border whitespace-nowrap ${
+                isDark
+                  ? 'border-white/[0.08] bg-zinc-800/90 text-white shadow-sm font-medium'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
               }`}
             >
-              <Moon className="w-3 h-3 text-[#818CF8]" />
-              <span>Dark Surface</span>
+              <Moon className="h-3.5 w-3.5 text-primary-hover shrink-0" />
+              <span>Superfície Escura</span>
             </button>
             <button
               onClick={() => setPreviewTheme('light')}
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded transition-colors ${
-                !isDark ? 'bg-[#FFFFFF] text-zinc-900 shadow-xs' : 'text-zinc-400 hover:text-zinc-200'
+              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1 rounded-[6px] transition-all border whitespace-nowrap ${
+                !isDark
+                  ? 'border-white/[0.08] bg-zinc-800/90 text-white shadow-sm font-medium'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
               }`}
             >
-              <Sun className="w-3 h-3 text-amber-500" />
-              <span>Light Surface</span>
+              <Sun className="h-3.5 w-3.5 text-amber-400 shrink-0" />
+              <span>Superfície Clara</span>
             </button>
           </div>
         </div>
@@ -403,14 +407,15 @@ export const LiveComponentPreview: React.FC = () => {
               </div>
 
               {/* Segmented Control Inside Preview */}
-              <div className="flex items-center p-0.5 rounded-lg border text-xs font-mono" style={{ backgroundColor: subSurface, borderColor: cardBorder }}>
+              <div className="flex items-center gap-1 p-1 rounded-lg border text-xs font-mono" style={{ backgroundColor: subSurface, borderColor: cardBorder }}>
                 {(['overview', 'activity', 'settings'] as const).map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className="px-2.5 py-1 rounded capitalize transition-all"
+                    className="px-2.5 py-1 rounded-[6px] capitalize transition-all border font-medium"
                     style={{
-                      backgroundColor: activeTab === tab ? (isDark ? '#262630' : '#FFFFFF') : 'transparent',
+                      backgroundColor: activeTab === tab ? (isDark ? 'rgba(255,255,255,0.08)' : '#FFFFFF') : 'transparent',
+                      borderColor: activeTab === tab ? (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)') : 'transparent',
                       color: activeTab === tab ? textColor : textMuted,
                       boxShadow: activeTab === tab ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
                     }}
@@ -594,7 +599,7 @@ export const LiveComponentPreview: React.FC = () => {
                     </td>
                     <td className="py-3 px-4">
                       <span
-                        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold border"
+                        className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[6px] text-[11px] font-semibold border"
                         style={{
                           backgroundColor: row.statusBg,
                           color: row.statusColor,
@@ -621,7 +626,7 @@ export const LiveComponentPreview: React.FC = () => {
                     </td>
                     <td className="py-3 px-4 text-right">
                       <button
-                        className="p-1 rounded text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.06] transition-colors"
+                        className="p-1 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.08] transition-colors"
                         title="View Metrics"
                       >
                         <ArrowUpRight className="w-3.5 h-3.5" />

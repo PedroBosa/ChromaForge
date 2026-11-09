@@ -74,19 +74,19 @@ export const WorkbenchLayout: React.FC = () => {
       <aside
         className={`${
           isSidebarOpen ? 'w-84 xl:w-92' : 'w-0'
-        } transition-all duration-200 ease-in-out border-r border-white/[0.07] bg-[#0D0D10] flex flex-col shrink-0 overflow-hidden select-none z-10`}
+        } transition-all duration-200 ease-in-out border-r border-white/[0.08] bg-[#0D0D10] flex flex-col shrink-0 overflow-hidden select-none z-10`}
       >
         {/* Ramp List Header */}
-        <div className="h-10 px-3.5 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-[#131317]">
+        <div className="h-10 px-3.5 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-[#0D0D10]">
           <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">
-            Palettes ({ramps.length})
+            Paletas ({ramps.length})
           </span>
           <button
             onClick={() => setIsAddingRamp(!isAddingRamp)}
-            className="flex items-center gap-1 text-[11px] font-mono text-zinc-300 hover:text-white px-2 py-0.5 rounded bg-white/[0.04] hover:bg-white/[0.08] transition-colors"
+            className="flex items-center gap-1.5 text-[11px] font-medium text-zinc-300 hover:text-white px-2.5 py-1 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.16] transition-colors"
           >
-            <Plus className="w-3 h-3 text-[#818CF8]" />
-            <span>New Ramp</span>
+            <Plus className="w-3.5 h-3.5 text-primary-hover" />
+            <span>Nova Paleta</span>
           </button>
         </div>
 
@@ -94,44 +94,44 @@ export const WorkbenchLayout: React.FC = () => {
         {isAddingRamp && (
           <form
             onSubmit={handleCreateRamp}
-            className="p-3 border-b border-white/[0.06] bg-[#070709] space-y-2"
+            className="p-3 border-b border-white/[0.06] bg-zinc-950/60 space-y-2"
           >
             <div className="flex items-center gap-2">
               <input
                 type="color"
                 value={newRampHex}
                 onChange={(e) => setNewRampHex(e.target.value)}
-                className="w-7 h-7 rounded border border-white/[0.1] bg-transparent cursor-pointer p-0 appearance-none"
+                className="w-8 h-8 rounded-lg border border-white/[0.1] bg-transparent cursor-pointer p-0 appearance-none"
               />
               <input
                 type="text"
-                placeholder="Ramp Name (e.g. Warning Amber)"
+                placeholder="Nome da Paleta (ex: Warning Amber)"
                 value={newRampName}
                 onChange={(e) => setNewRampName(e.target.value)}
                 autoFocus
-                className="flex-1 h-7 px-2 text-xs font-mono bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:outline-none focus:border-[#4F46E5]"
+                className="flex-1 h-8 px-2.5 text-xs font-mono bg-zinc-950 border border-white/[0.08] rounded-lg text-zinc-200 focus:outline-none focus:border-primary"
               />
             </div>
             <div className="flex items-center justify-end gap-2">
               <button
                 type="button"
                 onClick={() => setIsAddingRamp(false)}
-                className="px-2 py-1 text-[11px] font-mono text-zinc-400 hover:text-zinc-200"
+                className="px-2.5 py-1 text-xs font-mono text-zinc-400 hover:text-zinc-200"
               >
-                Cancel
+                Cancelar
               </button>
               <button
                 type="submit"
-                className="px-2.5 py-1 text-[11px] font-mono text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded"
+                className="px-3 py-1 text-xs font-semibold text-white bg-gradient-to-r from-primary to-secondary rounded-lg shadow-md shadow-primary/20 hover:opacity-95"
               >
-                Add Ramp
+                Adicionar
               </button>
             </div>
           </form>
         )}
 
         {/* Ramp List Navigation */}
-        <div className="p-2 space-y-1 border-b border-white/[0.06] max-h-48 overflow-y-auto">
+        <div className="p-2 space-y-1 border-b border-white/[0.06] max-h-48 overflow-y-auto custom-scrollbar">
           {ramps.map((ramp) => {
             const isSelected = ramp.id === activeRampId;
             return (
@@ -140,7 +140,7 @@ export const WorkbenchLayout: React.FC = () => {
                 onClick={() => setActiveRampId(ramp.id)}
                 className={`group flex items-center justify-between px-2.5 py-1.5 rounded-lg cursor-pointer transition-all ${
                   isSelected
-                    ? 'bg-[#1C1C24] text-white border border-white/[0.08] shadow-xs'
+                    ? 'bg-zinc-800/90 text-white border border-white/[0.08] shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.03]'
                 }`}
               >
@@ -158,7 +158,7 @@ export const WorkbenchLayout: React.FC = () => {
                       e.stopPropagation();
                       updateRampLocked(ramp.id, !ramp.locked);
                     }}
-                    className="p-1 hover:text-white text-zinc-500 rounded"
+                    className="p-1 hover:text-white text-zinc-500 rounded-lg hover:bg-white/[0.04] transition-colors"
                     title={ramp.locked ? 'Unlock ramp' : 'Lock ramp'}
                   >
                     {ramp.locked ? (
@@ -172,7 +172,7 @@ export const WorkbenchLayout: React.FC = () => {
                       e.stopPropagation();
                       duplicateRamp(ramp.id);
                     }}
-                    className="p-1 hover:text-white text-zinc-500 rounded"
+                    className="p-1 hover:text-white text-zinc-500 rounded-lg hover:bg-white/[0.04] transition-colors"
                     title="Duplicate ramp"
                   >
                     <Copy className="w-3 h-3" />
@@ -183,7 +183,7 @@ export const WorkbenchLayout: React.FC = () => {
                         e.stopPropagation();
                         removeRamp(ramp.id);
                       }}
-                      className="p-1 hover:text-rose-400 text-zinc-500 rounded"
+                      className="p-1 hover:text-rose-400 text-zinc-500 rounded-lg hover:bg-white/[0.04] transition-colors"
                       title="Delete ramp"
                     >
                       <Trash2 className="w-3 h-3" />
@@ -214,13 +214,13 @@ export const WorkbenchLayout: React.FC = () => {
             {/* Sidebar Toggle Button */}
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="p-1.5 rounded-md text-zinc-400 hover:text-zinc-200 bg-[#141418] hover:bg-[#1E1E26] border border-white/[0.07] transition-colors"
-              title={isSidebarOpen ? 'Collapse Inspector Panel' : 'Expand Inspector Panel'}
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 hover:text-zinc-200 bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.16] transition-colors"
+              title={isSidebarOpen ? 'Recolher Painel Lateral' : 'Expandir Painel Lateral'}
             >
               {isSidebarOpen ? (
-                <PanelLeftClose className="w-3.5 h-3.5" />
+                <PanelLeftClose className="w-4 h-4" />
               ) : (
-                <PanelLeft className="w-3.5 h-3.5 text-[#818CF8]" />
+                <PanelLeft className="w-4 h-4 text-primary-hover" />
               )}
             </button>
 
@@ -228,14 +228,14 @@ export const WorkbenchLayout: React.FC = () => {
               type="text"
               value={activeRamp.name}
               onChange={(e) => updateRampName(activeRamp.id, e.target.value)}
-              className="text-base font-semibold bg-transparent border-b border-transparent hover:border-white/[0.1] focus:border-[#4F46E5] text-zinc-100 focus:outline-none px-0.5"
+              className="text-base font-semibold bg-transparent border-b border-transparent hover:border-white/[0.1] focus:border-primary text-zinc-100 focus:outline-none px-0.5"
             />
 
             <div className="hidden sm:flex items-center gap-2">
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#131317] border border-white/[0.06] text-zinc-400">
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-white/[0.08] bg-white/[0.04] text-zinc-400">
                 Key: {activeRamp.keyHex}
               </span>
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-[#131317] border border-white/[0.06] text-zinc-400">
+              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-white/[0.08] bg-white/[0.04] text-zinc-400">
                 {formatOklchCss(activeRamp.keyColor, 3)}
               </span>
             </div>
@@ -244,14 +244,14 @@ export const WorkbenchLayout: React.FC = () => {
           <div className="flex items-center gap-2 text-[11px] font-mono text-zinc-500">
             <span>Cubic Bézier Interpolation</span>
             <span>·</span>
-            <span className="text-[#58DB91]">sRGB Clamped</span>
+            <span className="text-success font-medium">sRGB Clamped</span>
           </div>
         </div>
 
         {/* 11 Shades Palette Bar (The Core Swatch Strip with Horizontal Scroll Support) */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">
+            <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 font-semibold">
               Perceptual Scale (Steps 50 — 950)
             </span>
             <span className="text-[10px] font-mono text-zinc-500">
@@ -260,7 +260,7 @@ export const WorkbenchLayout: React.FC = () => {
           </div>
 
           {/* Scrollable Container so swatches are never squished */}
-          <div className="overflow-x-auto pb-2 -mx-2 px-2">
+          <div className="overflow-x-auto pb-2 -mx-2 px-2 custom-scrollbar">
             <div className="grid grid-cols-11 gap-1.5 min-w-[760px]">
               {activeRamp.shades.map((shade) => {
                 const isSelected = activeShadeStep === shade.step;
@@ -271,10 +271,10 @@ export const WorkbenchLayout: React.FC = () => {
                   <div
                     key={shade.step}
                     onClick={() => setActiveShadeStep(shade.step as ColorStep)}
-                    className={`flex flex-col rounded-xl overflow-hidden cursor-pointer transition-all bg-[#101014] border ${
+                    className={`flex flex-col rounded-xl overflow-hidden cursor-pointer transition-all bg-[#0D0D10] border ${
                       isSelected
-                        ? 'border-[#6366F1] ring-1 ring-[#6366F1] shadow-lg shadow-[#4F46E5]/10 -translate-y-1'
-                        : 'border-white/[0.07] hover:border-white/[0.18] hover:-translate-y-0.5'
+                        ? 'border-primary ring-1 ring-primary shadow-lg shadow-primary/20 -translate-y-1'
+                        : 'border-white/[0.08] hover:border-white/[0.18] hover:-translate-y-0.5'
                     }`}
                   >
                     {/* Swatch preview */}
@@ -371,7 +371,7 @@ export const WorkbenchLayout: React.FC = () => {
         {/* ==================================================================== */}
         {/* 3. SHADE INSPECTOR: Detailed Analysis of the Active Step            */}
         {/* ==================================================================== */}
-        <div className="rounded-xl border border-white/[0.07] bg-[#0D0D10] p-4 space-y-4">
+        <div className="rounded-xl border border-white/[0.08] bg-[#0D0D10] p-4 sm:p-5 space-y-4 shadow-2xl shadow-black/40">
           <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] flex-wrap gap-2">
             <div className="flex items-center gap-2">
               <span className="text-xs font-mono uppercase tracking-wider text-zinc-400">
@@ -389,16 +389,16 @@ export const WorkbenchLayout: React.FC = () => {
                     'copy-selected-css'
                   )
                 }
-                className="flex items-center gap-1 px-2.5 py-1 text-xs font-mono text-zinc-300 bg-[#16161C] hover:bg-[#202028] border border-white/[0.06] rounded transition-colors"
+                className="flex h-8 items-center gap-1.5 px-3 rounded-lg text-xs font-mono font-medium text-zinc-300 bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.16] hover:text-white transition-colors"
               >
                 {copiedHex === 'copy-selected-css' ? (
                   <>
-                    <Check className="w-3 h-3 text-[#58DB91]" />
-                    <span>Copied CSS</span>
+                    <Check className="h-3.5 w-3.5 text-success" strokeWidth={2} />
+                    <span className="text-success font-medium">Copied CSS</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3 h-3" />
+                    <Copy className="h-3.5 w-3.5 text-zinc-400" strokeWidth={1.75} />
                     <span>Copy CSS OKLCH</span>
                   </>
                 )}
@@ -408,7 +408,7 @@ export const WorkbenchLayout: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Colorimetry Coordinates without truncated text */}
-            <div className="space-y-2 p-3 rounded-lg bg-[#070709] border border-white/[0.05]">
+            <div className="space-y-2 p-3.5 rounded-lg bg-zinc-950/80 border border-white/[0.06]">
               <span className="text-[11px] font-mono text-zinc-400 block uppercase">
                 Colorimetric Values
               </span>
@@ -452,112 +452,112 @@ export const WorkbenchLayout: React.FC = () => {
             </div>
 
             {/* Accessibility: Contrast on White */}
-            <div className="space-y-2 p-3 rounded-lg bg-[#070709] border border-white/[0.05]">
+            <div className="space-y-2 p-3.5 rounded-lg bg-zinc-950/80 border border-white/[0.06]">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-mono text-zinc-400 uppercase">
-                  Contrast on White (#FFFFFF)
+                  Contraste em Branco (#FFFFFF)
                 </span>
                 <span
                   className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
                     selectedShade.contrastOnWhite.wcagRatio >= 4.5
-                      ? 'bg-[#58DB91]/10 text-[#58DB91] border border-[#58DB91]/20'
+                      ? 'bg-success/10 text-success border border-success/20'
                       : 'bg-zinc-800 text-zinc-400'
                   }`}
                 >
-                  {selectedShade.contrastOnWhite.wcagRatio >= 4.5 ? 'WCAG AA Pass' : 'Low Contrast'}
+                  {selectedShade.contrastOnWhite.wcagRatio >= 4.5 ? 'WCAG AA Pass' : 'Baixo Contraste'}
                 </span>
               </div>
               <div className="space-y-1.5 text-xs font-mono">
                 <div className="flex justify-between py-0.5 border-b border-white/[0.04]">
-                  <span className="text-zinc-500">WCAG 2.1 Ratio:</span>
+                  <span className="text-zinc-500">Razão WCAG 2.1:</span>
                   <span className="text-zinc-200 font-medium">
                     {selectedShade.contrastOnWhite.wcagRatio}:1
                   </span>
                 </div>
                 <div className="flex justify-between py-0.5 border-b border-white/[0.04]">
-                  <span className="text-zinc-500">APCA Score (Lc):</span>
+                  <span className="text-zinc-500">Score APCA (Lc):</span>
                   <span className="text-zinc-200 font-medium">
                     {selectedShade.contrastOnWhite.apcaScore > 0 ? `+${selectedShade.contrastOnWhite.apcaScore}` : selectedShade.contrastOnWhite.apcaScore} Lc
                   </span>
                 </div>
                 <div className="flex justify-between py-0.5 border-b border-white/[0.04]">
-                  <span className="text-zinc-500">Normal Text (AA):</span>
+                  <span className="text-zinc-500">Texto Normal (AA):</span>
                   <span
                     className={
                       selectedShade.contrastOnWhite.wcagRatio >= 4.5
-                        ? 'text-[#58DB91]'
+                        ? 'text-success'
                         : 'text-zinc-600'
                     }
                   >
-                    {selectedShade.contrastOnWhite.wcagRatio >= 4.5 ? 'Pass (4.5:1)' : 'Fail'}
+                    {selectedShade.contrastOnWhite.wcagRatio >= 4.5 ? 'Aprovado (4.5:1)' : 'Reprovado'}
                   </span>
                 </div>
                 <div className="flex justify-between py-0.5">
-                  <span className="text-zinc-500">Large Text / UI:</span>
+                  <span className="text-zinc-500">Texto Grande / UI:</span>
                   <span
                     className={
                       selectedShade.contrastOnWhite.wcagRatio >= 3.0
-                        ? 'text-[#58DB91]'
+                        ? 'text-success'
                         : 'text-zinc-600'
                     }
                   >
-                    {selectedShade.contrastOnWhite.wcagRatio >= 3.0 ? 'Pass (3.0:1)' : 'Fail'}
+                    {selectedShade.contrastOnWhite.wcagRatio >= 3.0 ? 'Aprovado (3.0:1)' : 'Reprovado'}
                   </span>
                 </div>
               </div>
             </div>
 
             {/* Accessibility: Contrast on Black with Educational Insight */}
-            <div className="space-y-2 p-3 rounded-lg bg-[#070709] border border-white/[0.05]">
+            <div className="space-y-2 p-3.5 rounded-lg bg-zinc-950/80 border border-white/[0.06]">
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-mono text-zinc-400 uppercase">
-                  Contrast on Dark (#000000)
+                  Contraste em Escuro (#000000)
                 </span>
                 <span
                   className={`text-[10px] font-mono px-1.5 py-0.5 rounded ${
                     selectedShade.contrastOnBlack.wcagRatio >= 4.5
-                      ? 'bg-[#58DB91]/10 text-[#58DB91] border border-[#58DB91]/20'
+                      ? 'bg-success/10 text-success border border-success/20'
                       : 'bg-zinc-800 text-zinc-400'
                   }`}
                 >
-                  {selectedShade.contrastOnBlack.wcagRatio >= 4.5 ? 'WCAG AA Pass' : 'Low Contrast'}
+                  {selectedShade.contrastOnBlack.wcagRatio >= 4.5 ? 'WCAG AA Pass' : 'Baixo Contraste'}
                 </span>
               </div>
               <div className="space-y-1.5 text-xs font-mono">
                 <div className="flex justify-between py-0.5 border-b border-white/[0.04]">
-                  <span className="text-zinc-500">WCAG 2.1 Ratio:</span>
+                  <span className="text-zinc-500">Razão WCAG 2.1:</span>
                   <span className="text-zinc-200 font-medium">
                     {selectedShade.contrastOnBlack.wcagRatio}:1
                   </span>
                 </div>
                 <div className="flex justify-between py-0.5 border-b border-white/[0.04]">
-                  <span className="text-zinc-500">APCA Score (Lc):</span>
+                  <span className="text-zinc-500">Score APCA (Lc):</span>
                   <span className="text-zinc-200 font-medium">
                     {selectedShade.contrastOnBlack.apcaScore} Lc
                   </span>
                 </div>
                 <div className="flex justify-between py-0.5 border-b border-white/[0.04]">
-                  <span className="text-zinc-500">Normal Text (AA):</span>
+                  <span className="text-zinc-500">Texto Normal (AA):</span>
                   <span
                     className={
                       selectedShade.contrastOnBlack.wcagRatio >= 4.5
-                        ? 'text-[#58DB91]'
+                        ? 'text-success'
                         : 'text-zinc-600'
                     }
                   >
-                    {selectedShade.contrastOnBlack.wcagRatio >= 4.5 ? 'Pass (4.5:1)' : 'Fail'}
+                    {selectedShade.contrastOnBlack.wcagRatio >= 4.5 ? 'Aprovado (4.5:1)' : 'Reprovado'}
                   </span>
                 </div>
                 <div className="flex justify-between py-0.5">
-                  <span className="text-zinc-500">Large Text / UI:</span>
+                  <span className="text-zinc-500">Texto Grande / UI:</span>
                   <span
                     className={
                       selectedShade.contrastOnBlack.wcagRatio >= 3.0
-                        ? 'text-[#58DB91]'
+                        ? 'text-success'
                         : 'text-zinc-600'
                     }
                   >
-                    {selectedShade.contrastOnBlack.wcagRatio >= 3.0 ? 'Pass (3.0:1)' : 'Fail'}
+                    {selectedShade.contrastOnBlack.wcagRatio >= 3.0 ? 'Aprovado (3.0:1)' : 'Reprovado'}
                   </span>
                 </div>
               </div>
@@ -566,10 +566,10 @@ export const WorkbenchLayout: React.FC = () => {
         </div>
 
         {/* Quick Token Snippet at the bottom */}
-        <div className="p-3 rounded-xl border border-white/[0.06] bg-[#070709] flex items-center justify-between text-xs font-mono flex-wrap gap-2">
+        <div className="p-3.5 rounded-xl border border-white/[0.08] bg-zinc-950/80 flex items-center justify-between text-xs font-mono flex-wrap gap-2">
           <div className="flex items-center gap-2 truncate text-zinc-400">
-            <span className="text-[#818CF8]">Tailwind v4:</span>
-            <span className="truncate select-all">
+            <span className="text-primary-hover font-semibold">Tailwind v4:</span>
+            <span className="truncate select-all text-zinc-200">
               --color-{activeRamp.name.toLowerCase().replace(/\s+/g, '-')}-{selectedShade.step}:{' '}
               {formatOklchCss(selectedShade.clampedOklch)};
             </span>
@@ -580,17 +580,17 @@ export const WorkbenchLayout: React.FC = () => {
                 `--color-${activeRamp.name.toLowerCase().replace(/\s+/g, '-')}-${selectedShade.step}: ${formatOklchCss(selectedShade.clampedOklch)};`,
                 'copy-quick-token'
               )}
-            className="flex items-center gap-1 px-2.5 py-1 rounded bg-[#131317] hover:bg-[#1E1E26] text-zinc-300 border border-white/[0.06] transition-colors shrink-0 ml-auto"
+            className="flex h-8 items-center gap-1.5 px-3 rounded-lg bg-white/[0.03] hover:bg-white/[0.08] text-zinc-300 hover:text-white border border-white/[0.08] hover:border-white/[0.16] text-xs font-medium transition-colors shrink-0 ml-auto"
           >
             {copiedHex === 'copy-quick-token' ? (
               <>
-                <Check className="w-3 h-3 text-[#58DB91]" />
-                <span>Copied</span>
+                <Check className="h-3.5 w-3.5 text-success" strokeWidth={2} />
+                <span className="text-success font-medium">Copiado</span>
               </>
             ) : (
               <>
-                <Copy className="w-3 h-3" />
-                <span>Copy Token</span>
+                <Copy className="h-3.5 w-3.5 text-zinc-400" strokeWidth={1.75} />
+                <span>Copiar Token</span>
               </>
             )}
           </button>

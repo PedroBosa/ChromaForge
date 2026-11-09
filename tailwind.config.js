@@ -5,14 +5,40 @@ export default {
   theme: {
     extend: {
       colors: {
+        background: '#09090B',
+        foreground: '#F4F4F6',
+        card: {
+          DEFAULT: '#0D0D10',
+          foreground: '#F4F4F6',
+        },
+        primary: {
+          DEFAULT: '#4F46E5',
+          hover: '#6366F1',
+          foreground: '#FFFFFF',
+        },
+        secondary: {
+          DEFAULT: '#9D4EDD',
+          hover: '#C77DFF',
+          foreground: '#FFFFFF',
+        },
+        success: {
+          DEFAULT: '#58DB91',
+          hover: '#88E788',
+          accent: '#95CC52',
+          foreground: '#09090B',
+        },
+        accent: {
+          cyan: '#22D3EE',
+          purple: '#C77DFF',
+        },
         studio: {
           base: '#09090B',
           surface: '#0D0D10',
           subsurface: '#131317',
           panel: '#18181E',
           hover: '#22222B',
-          border: 'rgba(255, 255, 255, 0.07)',
-          divider: 'rgba(255, 255, 255, 0.05)',
+          border: 'rgba(255, 255, 255, 0.08)',
+          divider: 'rgba(255, 255, 255, 0.06)',
           muted: '#8E8E9F',
           text: '#F4F4F6',
         },
@@ -27,8 +53,13 @@ export default {
           cyan: '#22D3EE',
         },
       },
+      borderRadius: {
+        lg: '0.625rem', // 10px - match QRCraft standard
+        md: 'calc(0.625rem - 2px)',
+        sm: 'calc(0.625rem - 4px)',
+      },
       fontFamily: {
-        sans: ['Geist', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Plus Jakarta Sans', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'Geist Mono', 'Menlo', 'monospace'],
       },
     },

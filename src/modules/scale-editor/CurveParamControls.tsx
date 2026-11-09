@@ -33,7 +33,7 @@ export const CurveParamControls: React.FC = () => {
               type="color"
               value={keyHex}
               onChange={(e) => updateRampKeyColor(activeRamp.id, e.target.value)}
-              className="w-8 h-8 rounded border border-white/[0.1] bg-transparent cursor-pointer p-0 appearance-none outline-none"
+              className="w-8 h-8 rounded-lg border border-white/[0.1] bg-transparent cursor-pointer p-0 appearance-none outline-none"
             />
           </div>
           <input
@@ -47,10 +47,10 @@ export const CurveParamControls: React.FC = () => {
                 }
               }
             }}
-            className="flex-1 h-8 px-2.5 text-xs font-mono bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:border-[#4F46E5] focus:outline-none"
+            className="flex-1 h-8 px-2.5 text-xs font-mono bg-zinc-950 border border-white/[0.08] rounded-lg text-zinc-200 focus:border-primary focus:outline-none"
             placeholder="#4F46E5"
           />
-          <div className="px-2 h-8 flex items-center bg-[#131317] border border-white/[0.06] rounded text-[11px] font-mono text-zinc-400">
+          <div className="px-2.5 h-8 flex items-center bg-zinc-950/80 border border-white/[0.06] rounded-lg text-[11px] font-mono text-zinc-400">
             C: {keyColor.c.toFixed(3)}
           </div>
         </div>
@@ -89,7 +89,7 @@ export const CurveParamControls: React.FC = () => {
                 chromaMultiplier: parseFloat(e.target.value) || 1.0,
               })
             }
-            className="w-14 h-7 px-1.5 text-center text-xs font-mono bg-zinc-950 border border-white/[0.08] rounded text-zinc-300 focus:outline-none"
+            className="w-14 h-7 px-1.5 text-center text-xs font-mono bg-zinc-950 border border-white/[0.08] rounded-lg text-zinc-300 focus:outline-none focus:border-primary"
           />
         </div>
       </div>
@@ -127,7 +127,7 @@ export const CurveParamControls: React.FC = () => {
                 hueShift: parseInt(e.target.value, 10) || 0,
               })
             }
-            className="w-14 h-7 px-1.5 text-center text-xs font-mono bg-zinc-950 border border-white/[0.08] rounded text-zinc-300 focus:outline-none"
+            className="w-14 h-7 px-1.5 text-center text-xs font-mono bg-zinc-950 border border-white/[0.08] rounded-lg text-zinc-300 focus:outline-none focus:border-primary"
           />
         </div>
       </div>
@@ -184,23 +184,23 @@ export const CurveParamControls: React.FC = () => {
         <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400">
           Chroma Envelope Model
         </span>
-        <div className="grid grid-cols-2 gap-1 p-0.5 bg-[#131317] rounded border border-white/[0.06]">
+        <div className="grid grid-cols-2 gap-1 p-1 bg-zinc-950/80 rounded-lg border border-white/[0.06]">
           <button
             onClick={() => updateRampCurveConfig(activeRamp.id, { chromaCurve: 'parabolic' })}
-            className={`py-1 text-xs font-mono rounded transition-colors ${
+            className={`py-1 text-xs font-mono rounded-[6px] transition-all border whitespace-nowrap ${
               curveConfig.chromaCurve === 'parabolic'
-                ? 'bg-[#1F1F28] text-white shadow-xs'
-                : 'text-zinc-500 hover:text-zinc-300'
+                ? 'border-white/[0.08] bg-zinc-800/90 text-white shadow-sm font-medium'
+                : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
             }`}
           >
             Parabolic 4t(1-t)
           </button>
           <button
             onClick={() => updateRampCurveConfig(activeRamp.id, { chromaCurve: 'sine' })}
-            className={`py-1 text-xs font-mono rounded transition-colors ${
+            className={`py-1 text-xs font-mono rounded-[6px] transition-all border whitespace-nowrap ${
               curveConfig.chromaCurve === 'sine'
-                ? 'bg-[#1F1F28] text-white shadow-xs'
-                : 'text-zinc-500 hover:text-zinc-300'
+                ? 'border-white/[0.08] bg-zinc-800/90 text-white shadow-sm font-medium'
+                : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
             }`}
           >
             Sine Wave sin(πt)
@@ -211,12 +211,12 @@ export const CurveParamControls: React.FC = () => {
       {/* 6. Optical Gamut Health Badge */}
       <div className="pt-2 border-t border-white/[0.06]">
         {outOfSrgbShades.length === 0 ? (
-          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded bg-[#58DB91]/10 border border-[#58DB91]/20 text-[#58DB91] text-[11px] font-mono">
+          <div className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-success/10 border border-success/20 text-success text-[11px] font-mono">
             <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
             <span>All 11 shades within sRGB Gamut</span>
           </div>
         ) : (
-          <div className="flex flex-col space-y-1 p-2 rounded bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-mono">
+          <div className="flex flex-col space-y-1 p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] font-mono">
             <div className="flex items-center gap-1.5 font-medium">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-amber-400" />
               <span>
@@ -228,7 +228,7 @@ export const CurveParamControls: React.FC = () => {
               {outOfSrgbShades.map((s) => (
                 <span
                   key={s.step}
-                  className="px-1 py-0.5 rounded bg-amber-400/20 text-amber-200 font-bold"
+                  className="px-1.5 py-0.5 rounded-[4px] bg-amber-400/20 text-amber-200 font-bold"
                 >
                   {s.step}
                 </span>

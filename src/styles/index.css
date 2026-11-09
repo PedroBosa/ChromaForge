@@ -2,33 +2,144 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
+@layer base {
+  :root {
+    color-scheme: dark;
+    --background: 240 10% 3.5%;     /* #09090B */
+    --foreground: 0 0% 98%;          /* #FAFAFA */
+    --card: 240 8% 6%;              /* #0D0D10 */
+    --card-foreground: 0 0% 98%;
+    --border: 240 5% 15%;
+    --input: 240 6% 12%;
+    --ring: 245 78% 60%;            /* Indigo */
+    --radius: 0.625rem;
+  }
+
+  * {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #09090B;
+    color: #F4F4F6;
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    @apply selection:bg-secondary/30 selection:text-white;
+  }
+
+  /* Otimização de renderização nítida de vetores e ícones SVG */
+  svg {
+    shape-rendering: geometricPrecision;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Elimina spinner nativo de inputs type=number */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield !important;
+  }
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  background-color: #09090b;
-  color: #f4f4f6;
-  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+/* ==========================================================================
+   SISTEMA GLOBAL DE SCROLLBAR PADRONIZADO (Linear / Geist / Raycast Style)
+   Substitui permanentemente a barra nativa do sistema operacional
+   ========================================================================== */
+
+/* Padrão W3C para Firefox e navegadores modernos */
+html, body {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255, 255, 255, 0.18) #09090B !important;
 }
 
-/* Custom scrollbars for high-density workbench */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* Dimensões do scrollbar em toda a aplicação */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
+/* Trilho com o fundo idêntico ao dark theme (#09090B) */
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background: #09090B !important;
 }
 
-::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 3px;
+/* Polegar do scroll: pílula translúcida elegante e arredondada */
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border-radius: 9999px !important;
+  border: 1px solid rgba(255, 255, 255, 0.03) !important;
+  transition: background 0.2s ease !important;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28) !important;
+}
+
+html::-webkit-scrollbar-thumb:active,
+body::-webkit-scrollbar-thumb:active,
+*::-webkit-scrollbar-thumb:active {
+  background: rgba(255, 255, 255, 0.42) !important;
+}
+
+html::-webkit-scrollbar-button,
+body::-webkit-scrollbar-button,
+*::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+html::-webkit-scrollbar-corner,
+body::-webkit-scrollbar-corner,
+*::-webkit-scrollbar-corner {
+  background: #09090B !important;
+}
+
+@layer utilities {
+  /* Micro-scrollbar ultrafina para trilhos horizontais específicos */
+  .custom-scrollbar::-webkit-scrollbar {
+    height: 3px !important;
+    width: 3px !important;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 9999px !important;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.18) !important;
+    border-radius: 9999px !important;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.32) !important;
+  }
+
+  /* Utilitário para ocultar scrollbars */
+  .no-scrollbar::-webkit-scrollbar,
+  .scrollbar-none::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  .no-scrollbar,
+  .scrollbar-none {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
 }

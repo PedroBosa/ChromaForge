@@ -58,7 +58,7 @@ export default function App() {
 
   return (
     <div className="flex flex-col h-screen w-screen bg-[#09090B] text-[#F4F4F6] font-sans overflow-hidden">
-      {/* TopBar (Linear / Geist style) */}
+      {/* TopBar (Standardized to QRCraft anatomy) */}
       <TopBar />
 
       {/* View Orchestrator */}
@@ -72,31 +72,31 @@ export default function App() {
 
       {/* Tokens Direct View with Full Format Tab Bar */}
       {activeView === 'tokens' && (
-        <div className="flex-1 flex flex-col overflow-hidden p-4 md:p-6 bg-[#09090B] space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-white/[0.06] flex-wrap gap-4">
+        <div className="flex-1 flex flex-col overflow-hidden p-3.5 sm:p-6 bg-[#09090B] space-y-4">
+          <div className="flex items-center justify-between pb-3.5 border-b border-white/[0.06] flex-wrap gap-4">
             <div>
               <div className="flex items-center gap-2">
-                <FileCode className="w-4 h-4 text-[#818CF8]" />
-                <h2 className="text-sm font-semibold text-zinc-200">
-                  Design Tokens Compiler
+                <FileCode className="h-4 w-4 text-primary-hover" strokeWidth={1.75} />
+                <h2 className="text-sm font-semibold text-white tracking-tight">
+                  Compilador de Design Tokens
                 </h2>
               </div>
               <p className="text-xs font-mono text-zinc-500 mt-0.5">
-                Ready-to-use output engineered for Tailwind v4, CSS Color Module 4, and W3C DTCG specs.
+                Saída pronta para engenharia compatível com Tailwind v4, CSS Color Module 4 e especificações W3C DTCG.
               </p>
             </div>
 
             {/* Format Selection Tab Bar */}
             <div className="flex items-center gap-2 flex-wrap">
-              <div className="flex items-center gap-1 bg-[#131317] p-0.5 rounded border border-white/[0.06]">
+              <div className="flex items-center gap-1 bg-zinc-950/80 p-1 rounded-lg border border-white/[0.06]">
                 {TOKEN_FORMATS.map((format) => (
                   <button
                     key={format.id}
                     onClick={() => setActiveFormat(format.id)}
-                    className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
+                    className={`px-2.5 py-1 text-xs font-mono rounded-[6px] transition-all border whitespace-nowrap ${
                       activeFormat === format.id
-                        ? 'bg-[#1F1F28] text-white shadow-xs font-semibold'
-                        : 'text-zinc-400 hover:text-zinc-200'
+                        ? 'border-white/[0.08] bg-zinc-800/90 text-white shadow-sm font-medium'
+                        : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
                     }`}
                   >
                     {format.label}
@@ -105,12 +105,12 @@ export default function App() {
               </div>
 
               {/* Hex Fallback Toggle */}
-              <label className="flex items-center gap-1.5 text-xs font-mono text-zinc-400 cursor-pointer px-2 py-1 rounded bg-[#131317] border border-white/[0.06]">
+              <label className="flex items-center gap-1.5 text-xs font-mono text-zinc-400 cursor-pointer px-2.5 py-1 rounded-lg bg-zinc-950/80 border border-white/[0.06] hover:text-zinc-300">
                 <input
                   type="checkbox"
                   checked={exportOptions.includeFallbackHex}
                   onChange={(e) => updateExportOptions({ includeFallbackHex: e.target.checked })}
-                  className="rounded border-zinc-700 bg-zinc-900 text-[#4F46E5] accent-[#4F46E5]"
+                  className="rounded border-zinc-700 bg-zinc-900 text-primary accent-primary"
                 />
                 <span>Hex Fallback</span>
               </label>
@@ -118,9 +118,9 @@ export default function App() {
               {/* Download File */}
               <button
                 onClick={handleDownload}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono text-zinc-300 bg-[#18181E] hover:bg-[#22222B] border border-white/[0.06] transition-colors"
+                className="flex items-center gap-1.5 h-8 px-2.5 sm:px-3 rounded-lg text-xs font-medium text-zinc-300 bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] hover:border-white/[0.16] hover:text-white transition-colors"
               >
-                <Download className="w-3.5 h-3.5" />
+                <Download className="h-3.5 w-3.5 text-secondary-hover" strokeWidth={1.75} />
                 <span>Download</span>
               </button>
 
@@ -131,17 +131,17 @@ export default function App() {
                   setCopiedTokens(true);
                   setTimeout(() => setCopiedTokens(false), 2000);
                 }}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono text-white bg-[#4F46E5] hover:bg-[#4338CA] transition-colors shadow-sm"
+                className="flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-primary to-secondary shadow-md shadow-primary/25 hover:opacity-95 transition-all"
               >
                 {copiedTokens ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-[#58DB91]" />
-                    <span>Copied!</span>
+                    <Check className="h-3.5 w-3.5 text-success" strokeWidth={2} />
+                    <span className="text-success font-medium">Copiado</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy Palette</span>
+                    <Copy className="h-3.5 w-3.5 text-zinc-200" strokeWidth={1.75} />
+                    <span>Copiar Tokens</span>
                   </>
                 )}
               </button>
@@ -149,7 +149,7 @@ export default function App() {
           </div>
 
           {/* Code Viewer */}
-          <div className="flex-1 overflow-auto rounded-xl border border-white/[0.07] bg-[#070709] p-4 shadow-inner">
+          <div className="flex-1 overflow-auto rounded-xl border border-white/[0.08] bg-zinc-950/90 p-4 shadow-2xl shadow-black/60 custom-scrollbar">
             <pre className="text-xs font-mono text-zinc-300 select-all leading-relaxed">
               <code>{compiledCode}</code>
             </pre>

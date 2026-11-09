@@ -368,15 +368,15 @@ export const GamutCanvasPlotter: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="flex flex-col rounded-xl border border-white/[0.07] bg-[#0D0D10] overflow-hidden"
+      className="flex flex-col rounded-xl border border-white/[0.08] bg-[#0D0D10] overflow-hidden shadow-2xl"
     >
       {/* Plotter Header: Flexible padding and safe layout */}
-      <div className="py-2 px-3 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-[#131317] gap-2 flex-wrap">
+      <div className="py-2.5 px-3.5 border-b border-white/[0.06] flex items-center justify-between shrink-0 bg-[#0D0D10] gap-2 flex-wrap">
         <div className="flex items-center gap-2 min-w-0">
           <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-300 truncate">
             Gamut Chromaticity
           </span>
-          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-white/[0.04] text-zinc-400 border border-white/[0.04] shrink-0">
+          <span className="text-[10px] font-mono px-1.5 py-0.5 rounded border border-white/[0.08] bg-white/[0.04] text-zinc-400 shrink-0">
             L: {selectedShade.clampedOklch.l.toFixed(3)}
           </span>
         </div>
@@ -385,10 +385,10 @@ export const GamutCanvasPlotter: React.FC = () => {
           {/* Zoom Toggle */}
           <button
             onClick={() => setZoomMode(zoomMode === 'full' ? 'fit' : 'full')}
-            className={`flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono rounded border transition-colors ${
+            className={`flex items-center gap-1 h-7 px-2 text-[10px] font-mono rounded-[6px] border transition-all ${
               zoomMode === 'fit'
-                ? 'bg-[#1F1F28] text-[#818CF8] border-[#818CF8]/40 font-semibold'
-                : 'text-zinc-400 border-white/[0.06] hover:bg-white/[0.04]'
+                ? 'border-white/[0.08] bg-zinc-800 text-primary-hover font-semibold shadow-sm'
+                : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
             }`}
             title={zoomMode === 'fit' ? 'Reset to Full Gamut' : 'Auto-Fit Zoom'}
           >
@@ -397,23 +397,23 @@ export const GamutCanvasPlotter: React.FC = () => {
           </button>
 
           {/* Mode Selector */}
-          <div className="flex items-center bg-[#070709] p-0.5 rounded border border-white/[0.06] text-[10px] font-mono">
+          <div className="flex items-center gap-1 bg-zinc-950/80 p-0.5 rounded-lg border border-white/[0.06] text-[10px] font-mono">
             <button
               onClick={() => setPlotMode('slice')}
-              className={`px-2 py-0.5 rounded transition-colors ${
+              className={`px-2 py-1 rounded-[6px] transition-all border whitespace-nowrap ${
                 plotMode === 'slice'
-                  ? 'bg-[#1F1F28] text-white shadow-xs font-semibold'
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  ? 'border-white/[0.08] bg-zinc-800/90 text-white shadow-sm font-medium'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
               }`}
             >
               Slice @ {selectedShade.step}
             </button>
             <button
               onClick={() => setPlotMode('envelope')}
-              className={`px-2 py-0.5 rounded transition-colors ${
+              className={`px-2 py-1 rounded-[6px] transition-all border whitespace-nowrap ${
                 plotMode === 'envelope'
-                  ? 'bg-[#1F1F28] text-white shadow-xs font-semibold'
-                  : 'text-zinc-500 hover:text-zinc-300'
+                  ? 'border-white/[0.08] bg-zinc-800/90 text-white shadow-sm font-medium'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200 hover:bg-white/[0.04]'
               }`}
             >
               Mid L:0.65
@@ -423,7 +423,7 @@ export const GamutCanvasPlotter: React.FC = () => {
       </div>
 
       {/* Canvas Area */}
-      <div className="relative p-2 bg-[#070709] flex items-center justify-center">
+      <div className="relative p-2 bg-[#09090B] flex items-center justify-center">
         <canvas
           ref={canvasRef}
           onClick={handleCanvasClick}
@@ -434,7 +434,7 @@ export const GamutCanvasPlotter: React.FC = () => {
       </div>
 
       {/* Clean Bottom Legend Strip */}
-      <div className="px-3 py-1.5 border-t border-white/[0.06] bg-[#0A0A0D] flex items-center justify-between text-[10px] font-mono flex-wrap gap-2">
+      <div className="px-3.5 py-2 border-t border-white/[0.06] bg-[#0D0D10] flex items-center justify-between text-[10px] font-mono flex-wrap gap-2">
         <div className="flex items-center gap-3 flex-wrap">
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-1 bg-[#6366F1] rounded-xs" />
