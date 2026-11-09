@@ -265,19 +265,71 @@ export const BezierCurveEditor: React.FC = () => {
         </svg>
       </div>
 
-      {/* Coordinate Displays */}
+      {/* Coordinate Displays with Direct Numerical Adjustment */}
       <div className="grid grid-cols-2 gap-2 text-[11px] font-mono">
         <div className="flex items-center justify-between px-2 py-1 rounded bg-[#131317] border border-white/[0.06]">
-          <span className="text-[#818CF8]">P1</span>
-          <span className="text-zinc-300">
-            [{lightnessP1[0].toFixed(2)}, {lightnessP1[1].toFixed(2)}]
-          </span>
+          <span className="text-[#818CF8] font-semibold">P1</span>
+          <div className="flex items-center gap-1 text-[10px]">
+            <input
+              type="number"
+              min="0"
+              max="1"
+              step="0.05"
+              value={lightnessP1[0]}
+              onChange={(e) =>
+                updateRampCurveConfig(activeRamp.id, {
+                  lightnessP1: [Math.max(0, Math.min(1, parseFloat(e.target.value) || 0)), lightnessP1[1]],
+                })
+              }
+              className="w-10 h-5 px-0.5 text-center bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:outline-none focus:border-[#4F46E5]"
+            />
+            <span className="text-zinc-500">,</span>
+            <input
+              type="number"
+              min="0"
+              max="1"
+              step="0.05"
+              value={lightnessP1[1]}
+              onChange={(e) =>
+                updateRampCurveConfig(activeRamp.id, {
+                  lightnessP1: [lightnessP1[0], Math.max(0, Math.min(1, parseFloat(e.target.value) || 0))],
+                })
+              }
+              className="w-10 h-5 px-0.5 text-center bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:outline-none focus:border-[#4F46E5]"
+            />
+          </div>
         </div>
         <div className="flex items-center justify-between px-2 py-1 rounded bg-[#131317] border border-white/[0.06]">
-          <span className="text-[#C77DFF]">P2</span>
-          <span className="text-zinc-300">
-            [{lightnessP2[0].toFixed(2)}, {lightnessP2[1].toFixed(2)}]
-          </span>
+          <span className="text-[#C77DFF] font-semibold">P2</span>
+          <div className="flex items-center gap-1 text-[10px]">
+            <input
+              type="number"
+              min="0"
+              max="1"
+              step="0.05"
+              value={lightnessP2[0]}
+              onChange={(e) =>
+                updateRampCurveConfig(activeRamp.id, {
+                  lightnessP2: [Math.max(0, Math.min(1, parseFloat(e.target.value) || 0)), lightnessP2[1]],
+                })
+              }
+              className="w-10 h-5 px-0.5 text-center bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:outline-none focus:border-[#9D4EDD]"
+            />
+            <span className="text-zinc-500">,</span>
+            <input
+              type="number"
+              min="0"
+              max="1"
+              step="0.05"
+              value={lightnessP2[1]}
+              onChange={(e) =>
+                updateRampCurveConfig(activeRamp.id, {
+                  lightnessP2: [lightnessP2[0], Math.max(0, Math.min(1, parseFloat(e.target.value) || 0))],
+                })
+              }
+              className="w-10 h-5 px-0.5 text-center bg-zinc-950 border border-white/[0.08] rounded text-zinc-200 focus:outline-none focus:border-[#9D4EDD]"
+            />
+          </div>
         </div>
       </div>
 

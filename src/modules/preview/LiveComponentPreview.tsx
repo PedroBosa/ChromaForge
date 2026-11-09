@@ -21,7 +21,7 @@ import {
 import { formatOklchCss } from '../../core/color/conversions';
 
 export const LiveComponentPreview: React.FC = () => {
-  const { ramps, activeRampId } = useChromaStore();
+  const { ramps, activeRampId, setActiveRampId } = useChromaStore();
 
   const [previewTheme, setPreviewTheme] = useState<'dark' | 'light'>('dark');
   const [activeTab, setActiveTab] = useState<'overview' | 'activity' | 'settings'>('overview');
@@ -149,15 +149,26 @@ export const LiveComponentPreview: React.FC = () => {
       <div className="h-12 px-6 border-b border-white/[0.07] flex items-center justify-between shrink-0 bg-[#0D0D10]">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p500 }} />
-            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-300">
+            <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: p500 }} />
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-300 hidden sm:inline">
               Live Token Environment
             </span>
           </div>
-          <span className="text-zinc-600 text-xs">/</span>
-          <span className="text-xs font-mono text-zinc-400">
-            Active Theme: <strong className="text-zinc-200">{primaryRamp.name}</strong>
-          </span>
+
+          <div className="flex items-center gap-1.5 text-xs font-mono">
+            <span className="text-zinc-500 hidden sm:inline">Theme:</span>
+            <select
+              value={activeRampId}
+              onChange={(e) => setActiveRampId(e.target.value)}
+              className="h-7 px-2 rounded bg-[#131317] border border-white/[0.08] text-zinc-200 focus:outline-none focus:border-[#4F46E5] text-xs font-mono"
+            >
+              {ramps.map((ramp) => (
+                <option key={ramp.id} value={ramp.id}>
+                  {ramp.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
         {/* Theme Mode Toggle (Dark UI / Light UI surface test) */}
