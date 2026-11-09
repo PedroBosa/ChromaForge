@@ -3,7 +3,7 @@
 > **Estúdio de engenharia colorimétrica no espaço OKLCH e compilador universal de design tokens. Processamento 100% no cliente, sem backend, sem dependências de rede e com precisão numérica em ponto flutuante de 64 bits.**
 
 <p align="center">
-  <a href="https://pedrobosa.github.io/ChromaForge/"><img alt="Demo ao vivo" src="https://img.shields.io/badge/Demo-Online-58DB91?style=for-the-badge&logo=github"></a>
+  <a href="https://pedrobosa.github.io/ChromaForge/"><img alt="Demo ao vivo" src="https://img.shields.io/badge/Demo-Online-10B981?style=for-the-badge&logo=github"></a>
   <a href="LICENSE"><img alt="Licença: MIT" src="https://img.shields.io/badge/Licen%C3%A7a-MIT-6366F1?style=for-the-badge"></a>
   <a href="https://github.com/PedroBosa"><img alt="Autor: Pedro Bosa" src="https://img.shields.io/badge/Autor-Pedro%20Bosa-4F46E5?style=for-the-badge&logo=github"></a>
 </p>
@@ -36,12 +36,12 @@ O ChromaForge baseia seus cálculos nativamente no espaço perceptual **OKLCH** 
 ### 1. Pipeline de transformações colorimétricas puras
 Todas as conversões são implementadas em rotinas matemáticas desacopladas do DOM e do React (`src/core/color/conversions.ts`), utilizando precisão numérica IEEE 754 de 64 bits.
 
-#### A. Expansão gama sRGB $\leftrightarrow$ Linear sRGB (IEC 61966-2-1)
+**Expansão gama sRGB $\leftrightarrow$ Linear sRGB (IEC 61966-2-1):**  
 Para cada canal normalizado $C \in [0, 1]$:
 
 $$C_{\text{linear}} = \begin{cases} \dfrac{C}{12.92}, & C \le 0.04045 \\[8pt] \left( \dfrac{C + 0.055}{1.055} \right)^{2.4}, & C > 0.04045 \end{cases}$$
 
-#### B. Espaço Linear sRGB $\rightarrow$ Oklab
+**Espaço Linear sRGB $\rightarrow$ Oklab:**  
 O sinal linear $(R_{\text{lin}}, G_{\text{lin}}, B_{\text{lin}})$ é projetado na matriz de resposta de cones oculares $M_1$ para derivar o espaço LMS:
 
 $$\begin{bmatrix} l \\ m \\ s \end{bmatrix} = \begin{bmatrix} 0.4122214708 & 0.5363325363 & 0.0514459929 \\ 0.2119034982 & 0.6806995451 & 0.1073969566 \\ 0.0883024619 & 0.2817188376 & 0.6299787005 \end{bmatrix} \begin{bmatrix} R_{\text{lin}} \\ G_{\text{lin}} \\ B_{\text{lin}} \end{bmatrix}$$
@@ -54,7 +54,7 @@ As coordenadas cartesianas Oklab $(L, a, b)$ são extraídas pela matriz $M_2$:
 
 $$\begin{bmatrix} L \\ a \\ b \end{bmatrix} = \begin{bmatrix} 0.2104542553 & 0.7936177850 & -0.0040720468 \\ 1.9779984951 & -2.4285922050 & 0.4505937099 \\ 0.0259040371 & 0.7827717662 & -0.8086757660 \end{bmatrix} \begin{bmatrix} l' \\ m' \\ s' \end{bmatrix}$$
 
-#### C. Projeção cilíndrica OKLCH
+**Projeção cilíndrica OKLCH:**  
 $$C = \sqrt{a^2 + b^2}, \qquad H = \left( \operatorname{atan2}(b, a) \cdot \frac{180}{\pi} \right) \pmod{360}$$
 
 ### 2. Algoritmo de contenção de gamut por busca binária
@@ -247,5 +247,6 @@ Contribuições que ampliem a precisão matemática ou a eficiência dos compila
 
 ## Licença
 
-Distribuído sob a licença MIT. Consulte [`LICENSE`](LICENSE) para mais informações.<br>
+Distribuído sob a licença MIT. Consulte [`LICENSE`](LICENSE) para mais informações.
+
 Desenvolvido por [Pedro Bosa](https://github.com/PedroBosa).
